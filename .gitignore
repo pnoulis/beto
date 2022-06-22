@@ -1,0 +1,5 @@
+# emacs auto save files
+*#
+# node modules
+node_modules/
+
