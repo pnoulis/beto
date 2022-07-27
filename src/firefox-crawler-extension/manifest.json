@@ -1,0 +1,15 @@
+{
+    "manifest_version": 2,
+    "name": "beto",
+    "version": "0.0.1",
+    "description": "beto is a web crawler used to fetch DOM objects",
+    "icons": {
+        "48": "../../assets/icons/pineapple_48px.png"
+    },
+    "content_scripts": [
+        {
+        "matches": ["*://*.mozilla.org/*", "*://*.opap.gr/*"],
+        "js": ["firefox_beto_crawler.js"]
+    }
+    ]
+}

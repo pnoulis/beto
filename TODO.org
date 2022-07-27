@@ -1,0 +1,146 @@
+* Download OPAPS betting predictions or odds
+*OPAP* which is a Greek betting company and other similar companies operating in
+the same space are called *book-keepers* or *bookmakers*.
+
+
+The first order of the day would be to catalog information about bookMakers
+such as their:
+
+1) Name
+2) Homepage
+3) Public API's if any
+4) Endpoints that might allow me to extract their daily odds
+5) The DOM object where the odds are kept
+
+** Gather information about bookMakers
+#+begin_src javascript
+  const bookMakers = [
+      {
+          name: "opap",
+          homepage: "https://pamestoixima.opap.gr",
+          oddsUrl: "https://pamestoixima.opap.gr",
+          oddsDOMObject: "",
+      },
+  ];
+#+end_src
+
+Unfortunately bookMakers are carefull enough not to allow automated extraction
+of their data by *web crawlers*.
+
+Some good books to read on developing web crawlers for purposes of data mining
+are:
+
+*Getting Structured Data from the Internet Running Web CrawlersScrapers on a Big Data Production Scale (Jay M. Patel) (z-lib.org).pdf*
+*Mining the Social Web Data Mining Facebook, Twitter, LinkedIn, Instagram, GitHub, and More (Russell, Matthew A., Klassen, Mikhail) (z-lib.org).pdf*
+
+Unfortunately I dont have the time now to read them so i must circumvent the
+bookMakers attempts to prevent me from mining their data by other means.
+
+
+** Developing a firefox extension to bypass the bookmakers prevention measures against data mining
+I have no idea of how to create a firefox extension but mozilla offers excelent
+documentation on many web development topics.
+https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension
+
+*** Creating the manifest.json file
+
+The mozilla guide instructs the following manifest file to be the minimum
+required to writting a web extension.
+#+begin_src json
+  {
+      "manifest_version": 2,
+      "name": "beto",
+      "version": "0.0.1",
+      "description": "beto is a web crawler used to fetch DOM objects",
+      "icons": {
+          "48": "assets/icons/pineapple_48px.png"
+      },
+      "content_scripts": [
+          {
+          "matches": ["*://*.opap.gr/*"],
+          "js": ["firefox_beto_crawler.js"]
+      }
+      ]
+  }
+#+end_src
+
+In the future I will need to automate the task of adding matches if more than
+one bookmaker is to be the target of the crawler.
+
+*** Creating firefox_beto_crawler.js
+#+begin_src bash
+  mkdir -p src/firefox-crawler-extension
+  touch src/firefox-crawler-extension/firefox_beto_crawler.js
+  echo "console.log('hello world')" >> src/firefox-crawler-extension/firefox_beto_crawler.js
+#+end_src
+
+*** testing the extension works
+In firefox's search bar insert 'about:debugging'
+On the right hand side press 'This firefox'
+Press Load Temporary add-on
+A file explorer window pops up
+Select manifest.json
+The path to manifest.json becomes the root of the extension
+
+If hello world appears in the developers console then the extension works
+
+Now that the extension works it is time to test if i can access the DOM elements
+of the bookKeeprs website.
+
+*** Accessing the DOM that holds the odds published by a bookMaker 
+Most bookMakers use react or other such frameworks which means that the DOM's
+final contents are not ready on the page load event. In fact the time a react or
+similar website takes to load is indeterminate although one can assume is
+somewhere in the range of 2 to 10 seconds under proper internet speeds.
+
+Therefore the odd's dom object must not be requested immediately but allow some
+time to pass.
+
+For that i will use the setTimeout build in browser function.
+
+#+begin_src javascript
+
+  // navigate at:
+  // pamestoixima.opap.gr
+  // opap publishes odds under a table with a classname of 'results-table'
+
+  // wait for 10 seconds then check if the odd's target can actually be accessed.
+  setTimeout(() => {
+      let odds = document.getElementsByClassName('results-table');
+      if (odds.length > 0) {
+          console.log('odds DOM object found');
+      } else {
+          console.log('odds DOM object not found');
+      }
+  }, 10000);
+#+end_src
+
+*** Download the requested DOM object if found locally so that it can more readily be used
+The question is: How do i download objects from websites and store them locally at disk.
+I will be using the *File System Access* API.
+Information about it can be found at:
+https://wicg.github.io/file-system-access/
+https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API
+https://web.dev/file-system-access/
+
+or at office/wiki/
+* Should create an array of bookkeeper companies
+* Opap has mechanisms in place to prevent the downloading of their daily odds
+* Glossary of betting terms
+** resources
+https://en.wikipedia.org/wiki/Sports_betting
+** bettor
+A person who places bets
+** over / under
+A wager offered on the combined score of the two teams playing. One can bet that
+the score will exceed the pronounced total or remain beneath it.
+** moneyline
+The simplest of wages a bettor can place; it requires the chosen team to win.
+** proposition bets
+A wager on a very specific outcome of a match not related to the final score.
+Usually of a statistical nature.
+
+Examples include predicting the number of goals a star player scores or similar statistics.
+** parlay
+A wager against multiple bets offered. The bettor is successfull only if all
+bets in the parlay win.
