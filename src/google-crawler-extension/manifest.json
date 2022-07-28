@@ -1,0 +1,6 @@
+{
+    "name": "beto-crawler",
+    "description": "beto-crawler is used to fetch DOM objects"
+    "version": "0.0.1",
+    "manifest_version": 3
+}

@@ -36,7 +36,6 @@ are:
 Unfortunately I dont have the time now to read them so i must circumvent the
 bookMakers attempts to prevent me from mining their data by other means.
 
-
 ** Developing a firefox extension to bypass the bookmakers prevention measures against data mining
 I have no idea of how to create a firefox extension but mozilla offers excelent
 documentation on many web development topics.
@@ -123,7 +122,17 @@ https://wicg.github.io/file-system-access/
 https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API
 https://web.dev/file-system-access/
 
-or at office/wiki/
+or at office under <file system access API>
+** Developing a google chrome extension because firefox has not yet implemented the File system access API
+Read google's developer starting-guide on building extensions:
+https://developer.chrome.com/docs/extensions/mv3/getstarted/
+
+*** Creating the dir structure to hold the extension
+#+begin_src bash 
+  mkdir -p src/google-crawler-extension
+  touch src/google-crawler-extension/beto_crawler_extension.js
+  touch src/google-crawler-extension/manifest.json
+#+end_src
 * Should create an array of bookkeeper companies
 * Opap has mechanisms in place to prevent the downloading of their daily odds
 * Glossary of betting terms

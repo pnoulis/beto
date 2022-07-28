@@ -1,8 +1,8 @@
 {
-    "manifest_version": 2,
-    "name": "beto",
+    "name": "beto-crawler",
+    "description": "beto-crawler is used to fetch DOM objects",
     "version": "0.0.1",
-    "description": "beto is a web crawler used to fetch DOM objects",
+    "manifest_version": 2,
     "icons": {
         "48": "../../assets/icons/pineapple_48px.png"
     },
